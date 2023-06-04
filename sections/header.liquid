@@ -1,3 +1,8 @@
+{% assign main_menu_linklists = linklists[section.settings.menu].links %}
+
+{{ shop.customer_accounts_enabled }}
+
+
 <div class="relative bg-white" x-data="{ mobileMenuOpen: true }">
   <div class="mx-auto px-4 sm:px-6">
     <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
@@ -19,7 +24,7 @@
 
       <!-- NAVIGATION MENU -->
       <nav class="hidden md:flex space-x-10">
-        {% for link in linklists.main-menu.links %}
+        {% for link in main_menu_linklists %}
           {% if link.links != blank %}
             {% assign link_handle = link.handle | replace: '-', '_' %}
             <div x-data=" { {{link_handle}}: false }" class="relative">
@@ -51,7 +56,8 @@
               </div>
             </div>
           {% else %}
-            <div class="relative">
+            <div
+              class="relative">
               <a
                 href="{{link.url}}"
                 class="
@@ -71,9 +77,10 @@
         <a href="{{routes.cart_url}}" class="whitespace-nowrap text-base text-gray-500 hover:text-gray-900">
           {% render 'icon-shopping-bag' %}
         </a>
-
-        <a href="{{routes.account_login_url}}" class="text-base text-gray-500 hover:text-gray-900">Login</a>
-        <a href="{{routes.account_register_url}}" class="text-base text-gray-500 hover:text-gray-900">Register</a>
+        {% if shop.customer_accounts_enabled %}
+          <a href="{{routes.account_login_url}}" class="text-base text-gray-500 hover:text-gray-900">Login</a>
+          <a href="{{routes.account_register_url}}" class="text-base text-gray-500 hover:text-gray-900">Register</a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -103,7 +110,7 @@
         <div class="pt-3">
 
           <nav class="grid gap-y-7">
-            {% for link in linklists.main-menu.links %}
+            {% for link in main_menu_linklists %}
               {% if link.links != blank %}
                 {% assign link_handle = link.handle | replace: '-', '_' %}
                 <div x-data="{ {{ link_handle }}: false }" class="relative">
@@ -151,6 +158,11 @@
         "label": "Title",
         "default": "Menu",
         "info": "This is title of the mobile menu window."
+      }, {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Header Menu",
+        "default": "main-menu"
       }
 
     ]
